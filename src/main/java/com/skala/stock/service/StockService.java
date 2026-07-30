@@ -55,4 +55,37 @@ public class StockService {
                 .previousPrice(stock.getPreviousPrice())
                 .build();
     }
+
+    // 코드로 조회
+    public StockDto getStockByCode(String code) {
+        Stock stock = stockRepository.findByCode(code)
+                .orElseThrow(() -> new RuntimeException("주식을 찾을 수 없습니다. 종목 코드: " + code));
+        return convertToDto(stock);
+    }
+
+    // 수정
+    @Transactional
+    public StockDto updateStock(Long id, StockDto stockDto) {
+        Stock stock = stockRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("주식을 찾을 수 없습니다: " + id));
+
+        if (stockDto.getName() != null) {
+            stock.setName(stockDto.getName());
+        }
+        if (stockDto.getCurrentPrice() != null) {
+            stock.setPreviousPrice(stock.getCurrentPrice()); // 기존 현재가를 전일가로
+            stock.setCurrentPrice(stockDto.getCurrentPrice());
+        }
+
+        return convertToDto(stock);
+    }
+
+    // 삭제
+    @Transactional
+    public void deleteStock(Long id) {
+        if (!stockRepository.existsById(id)) {
+            throw new RuntimeException("주식을 찾을 수 없습니다: " + id);
+        }
+        stockRepository.deleteById(id);
+    }
 }

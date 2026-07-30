@@ -40,4 +40,27 @@ public class StockController {
         List<StockDto> stocks = stockService.getAllStocks();
         return ResponseEntity.ok(stocks);
     }
+
+    // 코드로 조회
+    @GetMapping("/code/{code}")
+    @Operation(summary = "주식 조회 (Code)", description = "종목 코드로 주식을 조회합니다")
+    public ResponseEntity<StockDto> getStockByCode(@PathVariable String code) {
+        return ResponseEntity.ok(stockService.getStockByCode(code));
+    }
+
+    // 수정
+    @PutMapping("/{id}")
+    @Operation(summary = "주식 수정", description = "ID로 주식 정보를 수정합니다")
+    public ResponseEntity<StockDto> updateStock(@PathVariable Long id,
+            @RequestBody StockDto stockDto) {
+        return ResponseEntity.ok(stockService.updateStock(id, stockDto));
+    }
+
+    // 삭제
+    @DeleteMapping("/{id}")
+    @Operation(summary = "주식 삭제", description = "ID로 주식을 삭제합니다")
+    public ResponseEntity<Void> deleteStock(@PathVariable Long id) {
+        stockService.deleteStock(id);
+        return ResponseEntity.noContent().build();
+    }
 }
