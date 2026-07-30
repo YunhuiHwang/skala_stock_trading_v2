@@ -25,9 +25,14 @@ public class PortfolioService {
                 .collect(Collectors.toList());
     }
 
-    // addToPortfolio, updatePortfolio, removeFromPortfolio 메서드는 
-    // executeTrade() 제거로 인해 더 이상 사용되지 않습니다.
-    // 교육생 실습을 위해 제거되었습니다.
+    // 특정 주식 포트폴리오 조회
+    public PortfolioDto getUserPortfolioByStock(Long userId, Long stockId) {
+        Portfolio portfolio = portfolioRepository
+                .findByUserIdAndStockIdWithDetails(userId, stockId)
+                .orElseThrow(() -> new RuntimeException(
+                        "해당 주식의 보유 내역이 없습니다. userId=" + userId + ", stockId=" + stockId));
+        return convertToDto(portfolio);
+    }
 
     private PortfolioDto convertToDto(Portfolio portfolio) {
         Stock stock = portfolio.getStock();
