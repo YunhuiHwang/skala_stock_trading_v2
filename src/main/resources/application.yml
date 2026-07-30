@@ -28,12 +28,6 @@ spring:
       mode: always
       data-locations: classpath:data.sql
 
-mybatis:
-  mapper-locations: classpath:mapper/**/*.xml
-  type-aliases-package: com.skala.stock.entity
-  configuration:
-    map-underscore-to-camel-case: true
-
 springdoc:
   api-docs:
     path: /api-docs

@@ -1,4 +1,4 @@
-package com.skala.stock.mapper;
+package com.skala.stock.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
