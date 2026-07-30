@@ -1,10 +1,14 @@
 package com.skala.stock.controller;
 
+import com.skala.stock.dto.TradeRequestDto;
 import com.skala.stock.dto.TransactionDto;
 import com.skala.stock.service.TransactionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,5 +27,19 @@ public class TransactionController {
     public ResponseEntity<List<TransactionDto>> getUserTransactions(@PathVariable Long userId) {
         List<TransactionDto> transactions = transactionService.getUserTransactions(userId);
         return ResponseEntity.ok(transactions);
+    }
+
+    // 거래 상세 조회
+    @GetMapping("/{id}")
+    @Operation(summary = "거래 상세 조회", description = "거래 ID로 상세를 조회합니다")
+    public ResponseEntity<TransactionDto> getTransactionById(@PathVariable Long id) {
+        return ResponseEntity.ok(transactionService.getTransactionById(id));
+    }
+
+    // 주식 매매 실행
+    @PostMapping("/trade")
+    @Operation(summary = "주식 매매 실행", description = "매수(BUY)/매도(SELL) 거래를 실행합니다")
+    public ResponseEntity<TransactionDto> executeTrade(@Valid @RequestBody TradeRequestDto request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(transactionService.executeTrade(request));
     }
 }
